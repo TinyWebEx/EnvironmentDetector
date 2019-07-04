@@ -25,7 +25,7 @@ var sizeCollection = {
       outerWidth: window.outerWidth,
       outerHeight: window.outerHeight
     },
-    body: getDocumentElement(document.querySelector("body")),
+    body: getDocumentElement(document.body),
     html: getDocumentElement(document.documentElement),
     scroll: getDocumentElement(document.scrollingElement),
     screen: window.screen

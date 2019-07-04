@@ -11,8 +11,13 @@
   // only for the unit test, we need to load libraries from CDNs
   "content_security_policy": "default-src 'none'; style-src 'self' https://unpkg.com; script-src 'self' https://unpkg.com",
 
+  "browser_action": {
+      "browser_style": true,
+      "default_title": "EnvironmentDetector test popup",
+      "default_popup": "examples/popup/popup.html"
+    },
+
   "permissions": [
-  	"storage"
   ],
   "applications": {
     "gecko": {
