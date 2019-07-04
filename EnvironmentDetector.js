@@ -10,7 +10,7 @@ export const POPUP_TYPE = {
 };
 
 export const POPUP_SIZE = {
-    MAX: Symbol("maxiumum value")
+    MAX: Symbol("maximum value")
 };
 
 export const SIZE = {

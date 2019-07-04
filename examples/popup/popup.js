@@ -56,7 +56,7 @@ function analyse() {
     addText(`isPopup: ${EnvironmentDetector.isPopup()}`);
     addText(`getPopupType: ${EnvironmentDetector.getPopupType().toString()}`);
     const popupSize = EnvironmentDetector.getPopupSize();
-    addText(`getPopupSize: ${popupSize.width}x${popupSize.height}`);
+    addText(`getPopupSize: ${popupSize.width.toString()}x${popupSize.height.toString()}`);
 }
 
 addText("EnvironmentDetector test popup", true, "b");
