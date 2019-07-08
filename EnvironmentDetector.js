@@ -103,6 +103,57 @@ export function isPopup() {
 }
 
 /**
+ * Return debug data.
+ *
+ * @public
+ * @returns {Object}
+ */
+export function getDebugData() {
+    const getDocumentElement = (element) => {
+        return {
+            clientRects: element.getClientRects(),
+            boundingClientRects: element.getBoundingClientRect(),
+            clientWidth: element.clientWidth,
+            clientHeight: element.clientHeight,
+            offsetWidth: element.offsetWidth,
+            offsetHeight: element.offsetHeight,
+            scrollWidth: element.scrollWidth,
+            scrollHeight: element.scrollHeight
+        };
+    };
+
+    return {
+        inner: {
+            innerWidth: window.innerWidth,
+            innerHeight: window.innerHeight
+        },
+        outer: {
+            outerWidth: window.outerWidth,
+            outerHeight: window.outerHeight
+        },
+        body: getDocumentElement(document.body),
+        html: getDocumentElement(document.documentElement),
+        scroll: getDocumentElement(document.scrollingElement),
+        screen: {
+            width: window.screen.width,
+            height: window.screen.height,
+            left: window.screen.left,
+            top: window.screen.top,
+            availWidth: window.screen.availWidth,
+            availHeight: window.screen.availHeight,
+            availLeft: window.screen.availLeft,
+            availTop: window.screen.availTop,
+            mozOrientation: window.screen.mozOrientation,
+            orientation: {
+                angle: window.screen.orientation.angle,
+                type: window.screen.orientation.type,
+            },
+            pixelDepth: window.screen.pixelDepth,
+        }
+    };
+}
+
+/**
  * Returns whether the page overlows.
  *
  * @public

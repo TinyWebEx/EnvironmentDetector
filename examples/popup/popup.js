@@ -62,4 +62,7 @@ function analyse() {
 addText("EnvironmentDetector test popup", true, "b");
 // need to wait, because popup initializes at 0px size
 // analyse(); // you can use this to test it
-wait(200).then(analyse);
+wait(200).then(() => {
+    console.log(EnvironmentDetector.getDebugData());
+    return analyse();
+});
