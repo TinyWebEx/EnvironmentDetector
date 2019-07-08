@@ -4,6 +4,8 @@
  * @module EnvironmentDetector
  */
 
+import * as Helper from "./internal/Helper.js";
+
 export const POPUP_TYPE = {
     OVERFLOW: Symbol("overflow menu popup"),
     USUAL: Symbol("usual browser button popup")
@@ -28,26 +30,6 @@ const MAX_POPUP_SIZE = {
         HEIGHT: null,
     }
 };
-
-/**
- * Check whether size equals, when we remove the size for a scroll bar.
- *
- * @private
- * @param {number} withoutScrollbar size without a scrollbar
- * @param {number} withScrollbar size with a scrollbar
- * @returns {boolean}
- */
-function isSameSizeWithScrollbar(withoutScrollbar, withScrollbar) {
-    // Windows scroll bar: 14px
-    // Mac OS: 0px (not visible)
-    // allow ~20px for scrollbar
-    const SCROLL_TOLERANCE = 20; // TODO: make this os-dependent
-
-    return (
-        withoutScrollbar >= (withScrollbar - SCROLL_TOLERANCE) &&
-        withoutScrollbar <= withScrollbar
-    );
-}
 
 /**
  * Returns the popup environment this is running in.
@@ -91,15 +73,20 @@ export function getPopupSize() {
  * @returns {boolean}
  */
 export function isPopup() {
-    return ((
+    // window.outer* is the size of the main Firfox window
+    // If window.inner* is significantly smaller, this may be a popup.
+
+    // If it is the same as window size, our main window is likely maximized
+    const outerIsAsScreenSize = ((
         pageOverflows(SIZE.WIDTH) ?
-            isSameSizeWithScrollbar(screen.availWidth, window.outerWidth) :
+            Helper.isSameSizeWithScrollbar(screen.availWidth, window.outerWidth) :
             screen.availWidth === window.outerWidth
     ) && (
         pageOverflows(SIZE.HEIGHT) ?
-            isSameSizeWithScrollbar(screen.availHeight, window.outerHeight) :
+            Helper.isSameSizeWithScrollbar(screen.availHeight, window.outerHeight) :
             screen.availHeight === window.outerHeight
     ));
+    return outerIsAsScreenSize;
 }
 
 /**
