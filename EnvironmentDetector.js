@@ -31,6 +31,12 @@ const MAX_POPUP_SIZE = {
     }
 };
 
+// cache/retrieve value for OS directly at startup
+let cachedOs;
+browser.runtime.getPlatformInfo().then((platformInfo) => {
+    cachedOs = platformInfo.os;
+});
+
 /**
  * Returns the popup environment this is running in.
  *
@@ -38,8 +44,19 @@ const MAX_POPUP_SIZE = {
  * @returns {Object|null}
  */
 export function getPopupType() {
+    let overflowWidth;
+
+    // https://developer.mozilla.org/docs/Mozilla/Add-ons/WebExtensions/API/runtime/PlatformOs
+    switch (cachedOs) {
+    case "win":
+        overflowWidth = 348;
+        break;
+    default:
+        overflowWidth = 425;
+    }
+
     if (
-        window.innerWidth === 348
+        window.innerWidth === overflowWidth
     ) {
         return POPUP_TYPE.OVERFLOW;
     } else {
@@ -75,6 +92,14 @@ export function getPopupSize() {
 export function isPopup() {
     // window.outer* is the size of the main Firfox window
     // If window.inner* is significantly smaller, this may be a popup.
+
+    if (getPopupType() === POPUP_TYPE.OVERFLOW) {
+        return true;
+    }
+    if (cachedOs === "android") {
+        // Android never has popups
+        return false;
+    }
 
     // If it is the same as window size, our main window is likely maximized
     const outerIsAsScreenSize = ((
