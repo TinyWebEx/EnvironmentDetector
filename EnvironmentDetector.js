@@ -83,6 +83,41 @@ export function getPopupSize() {
 }
 
 /**
+ * Waits until the popup has completly opened.
+ *
+ * It may happen that all the other function return wrong/bad values, if the
+ * popup is not opened yet, if you are requesting these values very fast at the
+ * side loading.
+ * (still "folding" up)
+ * To prevent this, call this function asyncronously, i.e. e.g. await the Promise.
+ *
+ * By default it retries 10x in 50ms intervals, i.e. 0.5 seconds.
+ *
+ * @public
+ * @param {number} [retries=10] how often to retry at most
+ * @param {number} [delay=10] how many ms to re-check
+ * @returns {Promise}
+ */
+export async function waitForPopupOpen(retries = 10, delay = 50) {
+    const wait = (ms) => new Promise((func) => setTimeout(func, ms));
+
+    // values are correctly loaded
+    if (window.innerWidth !== 0 && window.innerHeight !== 0) {
+        return Promise.resolve();
+    }
+
+    if (retries <= 0) {
+        // should usually never™ happen, https://xkcd.com/2200/
+        throw new TypeError("no re-tries left, popup is not opened"); // will be converted into rejected promise
+    }
+
+    await wait(delay);
+
+    // retry
+    return waitForPopupOpen(retries - 1, delay);
+}
+
+/**
  * Returns whether we are running in a popup.
  *
  * @todo needs testing
