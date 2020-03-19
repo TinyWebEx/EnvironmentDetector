@@ -211,11 +211,61 @@ export function pageOverflows(size) {
     let doesOverflow = false;
 
     if (!size || size === SIZE.WIDTH) {
-        doesOverflow = doesOverflow || (document.documentElement.scrollWidth > document.documentElement.clientWidth);
+        doesOverflow = doesOverflow || (getOverflowInPixels(SIZE.WIDTH) > 0);
     }
     if (!size || size === SIZE.HEIGHT) {
-        doesOverflow = doesOverflow || (document.documentElement.scrollHeight > document.documentElement.clientHeight);
+        doesOverflow = doesOverflow || (getOverflowInPixels(SIZE.HEIGHT) > 0);
     }
 
     return doesOverflow;
+}
+
+/**
+ * Returns how many pixels the page overflows in one direction.
+ *
+ * @public
+ * @param {SIZE} size which size to check
+ * @returns {number}
+ */
+export function getOverflowInPixels(size) {
+    switch (size) {
+    case SIZE.WIDTH: {
+        const overflow = document.documentElement.scrollWidth - document.documentElement.clientWidth;
+        if (overflow > 0) {
+            return overflow;
+        }
+
+        // underflow
+        return document.body.clientWidth - document.documentElement.clientWidth;
+    } case SIZE.HEIGHT: {
+        const overflow = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+        if (overflow > 0) {
+            return overflow;
+        }
+
+        // underflow
+        return document.body.clientWidth - document.documentElement.clientWidth;
+    } default:
+        throw new TypeError("invalid size paramater passed");
+    }
+}
+
+/**
+ * Returns the percentage of the overflow in one direction.
+ *
+ * @public
+ * @param {SIZE} size which size to check
+ * @returns {number}
+ */
+export function getOverflowInPercentage(size) {
+    switch (size) {
+    case SIZE.WIDTH: {
+        const overflow = getOverflowInPixels(SIZE.WIDTH);
+        return overflow / document.documentElement.scrollWidth * 100;
+    } case SIZE.HEIGHT: {
+        const overflow = getOverflowInPixels(SIZE.HEIGHT);
+        return overflow / document.documentElement.scrollHeight * 100;
+    } default:
+        throw new TypeError("invalid size paramater passed");
+    }
 }
