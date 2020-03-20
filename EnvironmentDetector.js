@@ -8,7 +8,8 @@ import * as Helper from "./internal/Helper.js";
 
 export const POPUP_TYPE = {
     OVERFLOW: Symbol("overflow menu popup"),
-    USUAL: Symbol("usual browser button popup")
+    USUAL: Symbol("usual browser button popup"),
+    NEW_PAGE: Symbol("full page, opened in new tab, e.g. on Android"),
 };
 
 export const POPUP_SIZE = {
@@ -48,6 +49,8 @@ export function getPopupType() {
 
     // https://developer.mozilla.org/docs/Mozilla/Add-ons/WebExtensions/API/runtime/PlatformOs
     switch (cachedOs) {
+    case "android":
+        return POPUP_TYPE.NEW_PAGE;
     case "win":
         overflowWidth = 348;
         break;
