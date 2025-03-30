@@ -259,6 +259,7 @@ export function getOverflowInPixels(size) {
  * @public
  * @param {SIZE} size which size to check
  * @returns {number}
+ * @throws {TypeError} if an invalid size is passed
  */
 export function getOverflowInPercentage(size) {
     switch (size) {
