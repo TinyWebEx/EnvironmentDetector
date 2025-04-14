@@ -247,7 +247,7 @@ export function getOverflowInPixels(size) {
         }
 
         // underflow
-        return document.body.clientWidth - document.documentElement.clientWidth;
+        return document.body.clientHeight - document.documentElement.clientHeight;
     } default:
         throw new TypeError("invalid size paramater passed");
     }
